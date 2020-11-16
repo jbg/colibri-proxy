@@ -1,0 +1,13 @@
+[package]
+name = "colibri-proxy"
+version = "0.1.0"
+authors = ["Jasper Hugo <jasper@jasperhugo.com>"]
+edition = "2018"
+
+[dependencies]
+futures = "0.3.8"
+http = "0.2.1"
+kube = "0.43.0"
+k8s-openapi = { version = "0.9.0", default-features = false, features = ["v1_18"] }
+tokio = { version = "0.2.23", features = ["macros", "io-util", "tcp", "rt-threaded", "time", "parking_lot"] }
+tokio-tungstenite = "0.11.0"
