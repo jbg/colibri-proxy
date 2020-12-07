@@ -26,11 +26,14 @@ async fn main() {
 }
 
 async fn handle_connection(k8s_pods: kube::Api<Pod>, mut stream: TcpStream, addr: SocketAddr) -> Result<(), Box<dyn Error>> {
-  let mut peek_buf = [0u8; 6];
+  let mut peek_buf = [0u8; 8];
   stream.peek(&mut peek_buf).await?;
-  if &peek_buf == b"GET / " {
+  if &peek_buf == b"GET / HT" {
     stream.write_all(b"HTTP/1.1 200 OK\r\nContent-Length: 0\r\nConnection: close\r\n\r\n").await?;
     return Ok(());
+  }
+  else if &peek_buf == b"OPTIONS " {
+    stream.write_all(b"HTTP/1.1 204 No Content\r\nAccess-Control-Allow-Origin: *\r\nAccess-Control-Max-Age: 86400\r\nAccess-Control-Allow-Methods: POST, GET, OPTIONS\r\nConnection: close\r\n\r\n").await?;
   }
 
   let mut path = String::new();
